@@ -20,69 +20,6 @@ from skimage.segmentation import flood_fill
 from MapDrawing import sel_CapeDarnley,plotMap_Ant,plotMap_CapeDarnley_around,sel_CapeDarnley_around
 
 
-# In[Chargement de données annuelles]
-
-
-# def dataYears(data,List_Years=range(2010,2013),path=None,area='Antarctica',reanalysis='ERA'):
-    
-#     if  reanalysis == 'ERA':
-#         if data == 'polynie' :
-#             path = '/gpfswork/rech/omr/uvc35ld/stage/Polynyas/ERA5/Polynyas_70%/DAILY/'+str(data)+'s_era5_ant_y'
-        
-#         else :
-#             path = '/gpfsstore/rech/omr/romr008/DATA/ERA5/DAILY/'+str(data)+'_era5_ant_y'
-            
-#     if reanalysis == 'MERRA':
-        
-#         if data == 'polynie' :
-#             path = '/gpfswork/rech/omr/uvc35ld/stage/Polynyas/MERRA2/Polynyas_70%/DAILY/'+str(data)+'_merra2_ant_y'
-        
-#         else :
-#             path = '/gpfsstore/rech/omr/romr008/DATA/MERRA2/PROCESSED/DAILY/'+str(data)+'_merra2_ant_y'
-            
-#     if reanalysis == 'JRA':
-        
-#         if data == 'polynie' :
-#             path = '/gpfswork/rech/omr/uvc35ld/stage/Polynyas/JRA55/Polynyas_70%/DAILY/'+str(data)+'_jra55_ant_y'
-        
-#         else :
-#             path = '/gpfsstore/rech/omr/romr008/DATA/JRA55/PROCESSED/DAILY/'+str(data)+'_jra55_ant_y'
-        
-#     ##### data pour toutes les années (2010 --> 2020):
-#     data_an = []
-#     times_an = []
-#     times = 0
-    
-#     if reanalysis == 'JRA':
-#         for x in List_Years:
-#             if area=='Antarctica' :
-#                 data_intermediaire = xr.open_dataset(path+ str(x) +'.nc')[data]
-#             if area == 'Cape Darnley':
-#                 data_intermediaire = sel_CapeDarnley(xr.open_dataset(path+ str(x) +'.nc')[data])
-#             if area == 'Cape Darnley Around':
-#                 data_intermediaire = sel_CapeDarnley_around(xr.open_dataset(path+ str(x) +'.nc')[data])
-#             data_an.append(data_intermediaire)
-#             times_an.append(data_intermediaire.time_counter.values)
-#             times = times + times_an[-1].shape[0]
-            
-#     else :
-    
-#         for x in List_Years:
-#             if area=='Antarctica' :
-#                 data_intermediaire = xr.open_dataset(path+ str(x) +'.nc')[data]
-#             if area == 'Cape Darnley':
-#                 data_intermediaire = sel_CapeDarnley(xr.open_dataset(path+ str(x) +'.nc')[data])
-#             if area == 'Cape Darnley Around':
-#                 data_intermediaire = sel_CapeDarnley_around(xr.open_dataset(path+ str(x) +'.nc')[data])
-#             data_an.append(data_intermediaire)
-#             times_an.append(data_intermediaire.time.values)
-#             times = times + times_an[-1].shape[0]
-        
-#     data_2010_2020 = xr.merge(data_an)
-   
-#     return data_2010_2020
-
-
 # In[Selection Polynies distinctes]
 
 # =============================================================================
@@ -526,6 +463,7 @@ def dataYearsMonths_delta_H(data,delta_h=2,List_Years=range(2010,2013),List_Mont
             ### Loading of the data for a specific 'Year-Month' ###
             date = str(x)+'-'+str(y)
             if data != 'U10':
+                ### Loading of the data for a specific area ('Antarctica', 'Cape Darnley','Cape Darnley Around') (or station : 'Davis' or 'Mawson') ###
                 if area=='Antarctica' :
                     data_intermediaire = xr.open_dataset(path+ str(x) +'.nc')[data].sel(time=date)
                 if area == 'Cape Darnley':
@@ -551,7 +489,8 @@ def dataYearsMonths_delta_H(data,delta_h=2,List_Years=range(2010,2013),List_Mont
                 data_intermediaire_u =  xr.open_dataset(path_u+ str(x) +'.nc')['u10']
                 data_intermediaire_v =  xr.open_dataset(path_v+ str(x) +'.nc')['v10']
                 data_intermediaire_0 = np.sqrt(data_intermediaire_u * data_intermediaire_u + data_intermediaire_v*data_intermediaire_v)
-
+                
+                ### Loading of the data for a specific area ('Antarctica', 'Cape Darnley','Cape Darnley Around') (or station : 'Davis' or 'Mawson') ###
                 if area=='Antarctica' :
                     data_intermediaire = np.sqrt(data_intermediaire_0.sel(time=date))
                 if area == 'Cape Darnley':
